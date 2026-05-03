@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Álmos Palouma — CV</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Raleway:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink: #1a1410; --ink-soft: #3d3530;
+    --branch: #4a3f35; --accent: #b87c4c;
+    --bg: #f5f0e8; --card-bg: #fdfaf4; --lw: 2px;
+  }
+  body { background: var(--bg); color: var(--ink); font-family: 'Raleway', sans-serif; font-weight: 300; overflow-x: hidden; }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 1000; opacity: 0.45;
+  }
+
+  header {
+    text-align: center; padding: 80px 20px 0;
+    opacity: 0; transform: translateY(-16px);
+    animation: fadeDown 1.2s cubic-bezier(0.22,1,0.36,1) 0.2s forwards;
+  }
+  .name { font-family: 'Cormorant Garamond', serif; font-size: clamp(50px, 8vw, 90px); font-weight: 300; letter-spacing: 0.18em; }
+  .tagline { font-weight: 200; font-size: 10.5px; letter-spacing: 0.38em; text-transform: uppercase; color: var(--accent); margin-top: 12px; }
+  .contact { font-size: 11px; font-weight: 300; color: var(--ink-soft); margin-top: 10px; letter-spacing: 0.06em; }
+  .contact a { color: var(--ink-soft); text-decoration: none; border-bottom: 1px solid rgba(74,63,53,0.3); }
+  .header-stem { width: var(--lw); height: 64px; background: linear-gradient(to bottom, transparent, var(--branch)); margin: 36px auto 0; opacity: 0; animation: fadeIn 1s ease 1s forwards; }
+
+  .tree { position: relative; max-width: 900px; margin: 0 auto; padding: 0 24px 120px; }
+  .spine { position: absolute; left: 50%; transform: translateX(-50%); top: 0; width: var(--lw); background: var(--branch); height: 0; transition: height 0.55s cubic-bezier(0.22,1,0.36,1); z-index: 0; }
+
+  /* TIP */
+  .tip { display: flex; flex-direction: column; align-items: center; margin-bottom: 70px; position: relative; opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .tip.visible { opacity: 1; transform: translateY(0); }
+  .tip-dot { width: 14px; height: 14px; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 5px rgba(26,20,16,0.09); transform: scale(0); transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.1s; z-index: 2; }
+  .tip.visible .tip-dot { transform: scale(1); }
+  .tip-stem { width: var(--lw); height: 36px; background: var(--branch); transform-origin: top; transform: scaleY(0); transition: transform 0.45s ease 0.3s; }
+  .tip.visible .tip-stem { transform: scaleY(1); }
+  .tip-card { width: clamp(220px, 52%, 340px); text-align: center; background: var(--card-bg); border: 1px solid rgba(74,63,53,0.11); padding: 22px 28px 20px; box-shadow: 4px 6px 24px rgba(26,20,16,0.055); position: relative; z-index: 2; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+  .tip-card:hover { transform: translateY(-4px); box-shadow: 6px 12px 36px rgba(26,20,16,0.1); }
+  .tip-card::after  { content: ''; position: absolute; top: 0; right: 0; width: 16px; height: 16px; border-top: 2px solid var(--accent); border-right: 2px solid var(--accent); }
+  .tip-card::before { content: ''; position: absolute; top: 0; left:  0; width: 16px; height: 16px; border-top: 2px solid var(--accent); border-left:  2px solid var(--accent); }
+
+  /* EVENTS */
+  .event { display: flex; align-items: flex-start; position: relative; margin-bottom: 80px; opacity: 0; transform: translateY(44px); transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1); }
+  .event.visible { opacity: 1; transform: translateY(0); }
+  .event.right { flex-direction: row-reverse; }
+  .event.last { margin-bottom: 0; }
+
+  .dot { position: absolute; left: 50%; top: 20px; transform: translateX(-50%) scale(0); width: 11px; height: 11px; border-radius: 50%; background: var(--accent); border: 2.5px solid var(--bg); box-shadow: 0 0 0 1.5px var(--accent); z-index: 2; transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1) 0.2s; }
+  .event.visible .dot { transform: translateX(-50%) scale(1); }
+  .event.last .dot { background: var(--ink); box-shadow: 0 0 0 4px rgba(26,20,16,0.1); width: 13px; height: 13px; }
+
+  .branch { position: absolute; top: 25px; width: 0; height: var(--lw); background: var(--branch); opacity: 0.55; transition: width 0.55s cubic-bezier(0.22,1,0.36,1) 0.3s; z-index: 1; }
+  .event:not(.right) .branch { right: calc(50% + 5px); transform-origin: right center; }
+  .event.right        .branch { left:  calc(50% + 5px); transform-origin: left  center; }
+  .event.visible .branch { width: calc(50% - 60px); }
+
+  .card { width: calc(50% - 72px); background: var(--card-bg); border: 1px solid rgba(74,63,53,0.11); padding: 22px 26px 20px; position: relative; z-index: 2; box-shadow: 4px 6px 24px rgba(26,20,16,0.055); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+  .card:hover { transform: translateY(-4px); box-shadow: 6px 12px 36px rgba(26,20,16,0.1); }
+  .event:not(.right) .card { margin-right: auto; }
+  .event.right        .card { margin-left:  auto; }
+  .card::after { content: ''; position: absolute; top: 0; right: 0; width: 15px; height: 15px; border-top: 2px solid var(--accent); border-right: 2px solid var(--accent); }
+  .event:not(.right) .card::after { right: auto; left: 0; border-right: none; border-left: 2px solid var(--accent); }
+
+  .year { font-family: 'Raleway', sans-serif; font-weight: 300; font-size: 13px; letter-spacing: 0.28em; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; }
+  .event-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--ink); line-height: 1.25; margin-bottom: 8px; }
+  .event-desc { font-size: 12.5px; font-weight: 300; color: var(--ink-soft); line-height: 1.78; letter-spacing: 0.02em; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+  .tag { font-size: 9px; font-weight: 400; letter-spacing: 0.22em; text-transform: uppercase; padding: 3px 10px; border: 1px solid rgba(74,63,53,0.22); color: var(--ink-soft); }
+
+  @keyframes fadeDown { to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn   { to { opacity: 1; } }
+
+  @media (max-width: 580px) {
+    .event, .event.right { flex-direction: column; padding-left: 28px; }
+    .event:not(.right) .card, .event.right .card { width: 100%; margin: 0; }
+    .dot { left: 0; transform: translateX(0) scale(0); }
+    .event.visible .dot { transform: translateX(0) scale(1); }
+    .branch { display: none; }
+    .spine { left: 5px; }
+    .tip-card { width: 90%; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="name">Álmos Palouma</div>
+  <div class="tagline">Economics · Data Science · Community Impact</div>
+  <div class="contact">
+    Brighton, UK &nbsp;·&nbsp;
+    <a href="mailto:almosmunka@gmail.com">almosmunka@gmail.com</a> &nbsp;·&nbsp;
+    +36 70 397 0221
+  </div>
+</header>
+<div class="header-stem"></div>
+
+<div class="tree" id="tree">
+  <div class="spine" id="spine"></div>
+</div>
+
+<script>
+/* ════════════════════════════════════════════════
+   ★  EDIT YOUR EVENTS HERE
+   ─────────────────────────────────────────────
+   date  — displayed above the title in small caps
+   title — headline of the card
+   desc  — 1–3 sentences describing the event
+   tags  — short labels shown as pills (can be [])
+
+   • First entry  = top tip (centred, origin point)
+   • Last entry   = where the spine ends
+   • Branches alternate right → left → right…
+════════════════════════════════════════════════ */
+const events = [
+  {
+    date:  "2018",
+    title: "Moved to Hungary — BPS",
+    desc:  "Relocated from the UK to Budapest and enrolled at BPS (Budapest School), an international school with plans for a bilingual curriculum that never fully materialised.",
+    tags:  ["Budapest", "BPS"]
+  },
+  {
+    date:  "2021 – 2023",
+    title: "BME High School",
+    desc:  "Accepted into the high school of Hungary's #2 ranked academic institution — notoriously competitive to enter. A rigorous academic environment that became the launchpad for international engagement.",
+    tags:  ["BME", "Education"]
+  },
+  {
+    date:  "2022 – 2024",
+    title: "Project K.I.N.G. — SDG Ambassador",
+    desc:  "Joined an international cohort of scholars tackling humanitarian issues locally and remotely, mentored by world-renowned academics and activists. Nominated as Ambassador for SDG 6 (Clean Water & Sanitation) and hosted a podcast on the water crisis in Chad. Also co-founded myrportal.com — a platform giving refugees displaced by the Russo-Ukrainian conflict real-time information on water, food, and shelter in Budapest.",
+    tags:  ["K.I.N.G.", "SDG 6", "MYR", "Podcast", "Humanitarian"]
+  },
+  {
+    date:  "Winter 2024",
+    title: "CS50P — Harvard University",
+    desc:  "Completed Harvard's professional Python certificate covering algorithms, object-oriented programming, file I/O, and testing. Final project: a fully functional currency converter.",
+    tags:  ["Python", "Harvard", "CS50"]
+  },
+  {
+    date:  "Spring 2025",
+    title: "Bilingual Matura — AIC",
+    desc:  "Graduated with distinction. HL English 91% · HL Information Technology 86% · SL Mathematics 87% · SL History 60% · SL Hungarian 70% · Overall average 4.6 / 5.",
+    tags:  ["Matura", "Graduation"]
+  },
+  {
+    date:  "2025",
+    title: "Data Analyitics Project — Mean Reversion",
+    desc:  "Backtested a mean-reversion proxy strategy across seasonally oscillating commodity ETFs (WEAT, CORN, SOYB). Found a positive correlation between each commodity's SARIMA seasonality index and the strategy's performance.",
+    tags:  ["Python", "NumPy", "yfinance", "SARIMA", "JupyterNotebooks"]
+  },
+  {
+    date:  "Summer 2025",
+    title: "Accounting Internship — Summa San Inc.",
+    desc:  "Full-time remote internship at a New York-based 501(c)(3) NGO. Designed and implemented quarterly budget cycles and financial summaries, improving leadership visibility of programme spending. Developed financial literacy content delivered to community beneficiaries across programme regions.",
+    tags:  ["Finance", "NGO", "Non-profit"]
+  },
+  {
+    date:  "Autumn 2025",
+    title: "80th UN General Assembly — New York",
+    desc:  "Invited by Summa San stakeholders to attend the 80th General Assembly. At an AI summit, heard from industry innovators and professors on the nuances of human agency and its new contenders — a moment that sharpened the direction of independent research.",
+    tags:  ["United Nations", "AI", "New York"]
+  },
+  {
+    date:  "September 2025",
+    title: "BSc International Management — Budapest",
+    desc:  "Awarded a full merit scholarship to Budapest University of Economics and Business, Hungary's #2 economics institution. Modules included Social Science Data Analysis, International Economics, and Sustainable Management.",
+    tags:  ["Scholarship", "Economics", "Budapest"]
+  },
+  
+  {
+    date:  "2026",
+    title: "Data Science Research — ML & Asset Mispricing",
+    desc:  "Following New York, began implementing machine learning in financial research. Built an asset mispricing detection model using intrinsic value regression to separate fundamental value from short-term price noise, validated via walk-forward testing with macro-regime conditioning through Hidden Markov Models.",
+    tags:  ["Python", "HMM", "ML", "Regression", "Quant"]
+  },
+  {
+    date:  "2026",
+    title: "Sahel Library Initiative",
+    desc:  "Founded a cross-border book donation initiative collecting unused course books from English and French bilingual schools and shipping them to a library in N'Djamena, Chad. Built full front-end and back-end infrastructure; coordinated partnerships with schools, libraries, and logistics providers. 22 books received to date, accessed by children.",
+    tags:  ["Chad", "Education", "Full-stack"]
+  },
+  {
+    date:  "September 2026",
+    title: "BSc Economics & Data Science — University of Sussex",
+    desc:  "Beginning undergraduate study at Sussex, Brighton. Core modules: Applied Mathematics for Economics, Applied Machine Learning, Financial Economics, and Economics & Data Science.",
+    tags:  ["Brighton", "Economics", "Data Science", "ML"]
+  }
+];
+
+/* ── DOM builder ─────────────────────────────── */
+const tree = document.getElementById('tree');
+
+function tagsHTML(tags, center) {
+  if (!tags.length) return '';
+  const s = center ? ' style="justify-content:center"' : '';
+  return `<div class="tags"${s}>${tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>`;
+}
+
+events.forEach((ev, i) => {
+  const isFirst = i === 0;
+  const isLast  = i === events.length - 1;
+  const side    = (i % 2 === 0) ? 'right' : '';
+
+  if (isFirst) {
+    const el = document.createElement('div');
+    el.className = 'tip';
+    el.dataset.reveal = '';
+    el.innerHTML = `
+      <div class="tip-dot"></div>
+      <div class="tip-stem"></div>
+      <div class="tip-card">
+        <div class="year">${ev.date}</div>
+        <div class="event-title">${ev.title}</div>
+        <div class="event-desc">${ev.desc}</div>
+        ${tagsHTML(ev.tags, true)}
+      </div>`;
+    tree.appendChild(el);
+  } else {
+    const el = document.createElement('div');
+    el.className = `event${side ? ' ' + side : ''}${isLast ? ' last' : ''}`;
+    el.dataset.reveal = '';
+    el.innerHTML = `
+      <div class="dot"></div>
+      <div class="branch"></div>
+      <div class="card">
+        <div class="year">${ev.date}</div>
+        <div class="event-title">${ev.title}</div>
+        <div class="event-desc">${ev.desc}</div>
+        ${tagsHTML(ev.tags, false)}
+      </div>`;
+    tree.appendChild(el);
+  }
+});
+
+/* ── Scroll-reveal + spine growth ─────────────── */
+const spine = document.getElementById('spine');
+
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const el = entry.target;
+    el.classList.add('visible');
+
+    const treeTop = tree.getBoundingClientRect().top + window.scrollY;
+    const elTop   = el.getBoundingClientRect().top   + window.scrollY;
+    const target  = elTop - treeTop + el.offsetHeight * 0.3;
+    if (target > (parseFloat(spine.style.height) || 0)) {
+      spine.style.height = target + 'px';
+    }
+    io.unobserve(el);
+  });
+}, { threshold: 0.18, rootMargin: '0px 0px -30px 0px' });
+
+document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
