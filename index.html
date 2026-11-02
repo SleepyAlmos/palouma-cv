@@ -9,7 +9,7 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
     --ink: #1a1410; --ink-soft: #3d3530;
-    --branch: #4a3f35; --accent: #b87c4c;
+    --branch: #4a3f35; --accent: #b87c4c; --hot: #e8742a;
     --bg: #f5f0e8; --card-bg: #fdfaf4; --lw: 2px;
   }
   body { background: var(--bg); color: var(--ink); font-family: 'Raleway', sans-serif; font-weight: 300; overflow-x: hidden; }
@@ -19,8 +19,14 @@
     pointer-events: none; z-index: 1000; opacity: 0.45;
   }
 
+  /* MENU */
+  .nav { position: sticky; top: 0; z-index: 900; display: flex; justify-content: center; gap: clamp(20px,5vw,48px); padding: 18px 16px; background: rgba(245,240,232,0.93); backdrop-filter: blur(6px); border-bottom: 1px solid rgba(74,63,53,0.12); }
+  .nav a { font-size: 11px; font-weight: 400; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ink-soft); text-decoration: none; padding-bottom: 4px; border-bottom: 2px solid transparent; transition: color 0.2s; }
+  .nav a:hover { color: var(--accent); }
+  .nav a.on { color: var(--ink); border-bottom-color: var(--accent); }
+
   header {
-    text-align: center; padding: 80px 20px 0;
+    text-align: center; padding: 64px 20px 0;
     opacity: 0; transform: translateY(-16px);
     animation: fadeDown 1.2s cubic-bezier(0.22,1,0.36,1) 0.2s forwards;
   }
@@ -73,6 +79,12 @@
   .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
   .tag { font-size: 9px; font-weight: 400; letter-spacing: 0.22em; text-transform: uppercase; padding: 3px 10px; border: 1px solid rgba(74,63,53,0.22); color: var(--ink-soft); }
 
+  /* ORANGE ROUND BUTTON */
+  .go { display: flex; flex-direction: column; align-items: center; gap: 9px; margin-top: 22px; text-decoration: none; }
+  .go i { width: 78px; height: 78px; border-radius: 50%; background: var(--hot); color: #fff; display: flex; align-items: center; justify-content: center; font-style: normal; font-size: 36px; box-shadow: 0 8px 22px rgba(232,116,42,0.45); transition: transform 0.25s ease, box-shadow 0.25s ease; }
+  .go:hover i { transform: scale(1.1); box-shadow: 0 12px 30px rgba(232,116,42,0.6); }
+  .go span { font-size: 9.5px; font-weight: 400; letter-spacing: 0.24em; text-transform: uppercase; color: var(--hot); }
+
   @keyframes fadeDown { to { opacity: 1; transform: translateY(0); } }
   @keyframes fadeIn   { to { opacity: 1; } }
 
@@ -88,6 +100,12 @@
 </style>
 </head>
 <body>
+
+<nav class="nav">
+  <a href="index.html" class="on">Home</a>
+  <a href="research.html">Research</a>
+  <a href="https://sleepyalmos.github.io/QRCV/CV.pdf" target="_blank" rel="noopener">Resume</a>
+</nav>
 
 <header>
   <div class="name"> Seryabe Álmos Palouma</div>
@@ -112,6 +130,7 @@
    title — headline of the card
    desc  — 1–3 sentences describing the event
    tags  — short labels shown as pills (can be [])
+   link  — (optional) adds the big orange round button
 
    • First entry  = top tip (centred, origin point)
    • Last entry   = where the spine ends
@@ -152,7 +171,8 @@ const events = [
     date:  "2025",
     title: "Data Analytics Project — Mean Reversion",
     desc:  "Backtested a mean-reversion proxy strategy across seasonally oscillating commodity ETFs (WEAT, CORN, SOYB). Searched for a positive correlation between each commodity's SARIMA seasonality index and the strategy's performance. This was educational, technical descriptive analytics which later motivated me to pursue fundamental regressive research for a more predictive approach.",
-    tags:  ["Python", "NumPy", "yfinance", "SARIMA", "JupyterNotebooks"]
+    tags:  ["Python", "NumPy", "yfinance", "SARIMA", "JupyterNotebooks"],
+    link:  "mean-reversion.html"
   },
   {
     date:  "Summer 2025",
@@ -221,6 +241,10 @@ function tagsHTML(tags, center) {
   return `<div class="tags"${s}>${tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>`;
 }
 
+function goHTML(link) {
+  return link ? `<a class="go" href="${link}"><i>→</i><span>View live research</span></a>` : '';
+}
+
 events.forEach((ev, i) => {
   const isFirst = i === 0;
   const isLast  = i === events.length - 1;
@@ -238,6 +262,7 @@ events.forEach((ev, i) => {
         <div class="event-title">${ev.title}</div>
         <div class="event-desc">${ev.desc}</div>
         ${tagsHTML(ev.tags, true)}
+        ${goHTML(ev.link)}
       </div>`;
     tree.appendChild(el);
   } else {
@@ -252,6 +277,7 @@ events.forEach((ev, i) => {
         <div class="event-title">${ev.title}</div>
         <div class="event-desc">${ev.desc}</div>
         ${tagsHTML(ev.tags, false)}
+        ${goHTML(ev.link)}
       </div>`;
     tree.appendChild(el);
   }
