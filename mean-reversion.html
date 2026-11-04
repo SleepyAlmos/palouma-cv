@@ -292,7 +292,7 @@ function buildRows(W,names){const ids=[...new Set(W.map(w=>w.ticker))];
   const o={id,name:names[id]||id,asset:m("asset_return"),strat:m("strategy_return"),sharpe:m("sharpe"),dd:m("max_drawdown"),seas:m("seasonality")};o.excess=o.strat-o.asset;return o})}
 function notes(){
  const W=RECENT,n=W.length,m=k=>W.reduce((s,x)=>s+x[k],0)/n;
- $("n1").innerHTML=`Across the ${n} windows in this dataset the strategy averaged ${P(m("strategy_return"))} per 3 years against ${P(m("asset_return"))} for buy-and-hold. It beat buy-and-hold in ${W.filter(x=>x.strategy_return>x.asset_return).length} of ${n} windows and made money in ${W.filter(x=>x.strategy_return>0).length}.`}
+ $("n1").innerHTML=`Across the ${n} windows in this dataset the strategy averaged ${P(m("strategy_return"))} per 3 years against ${P(m("asset_return"))} for buy-and-hold. It beat buy-and-hold in ${W.filter(x=>x.strategy_return>x.asset_return).length} of ${n} windows and made money in ${W.filter(x=>x.strategy_return>0).length}. The strategy holds up with a mediocre sharpe ratio. How does seasonality affect returns?`}
 function verdict(){
  const D=pts(),n=D.length,r=corr(D.map(p=>p.seas),D.map(p=>p.strat)),p=pval(r,n),a=Math.abs(r);
  const w=a<.1?"No meaningful relationship":(a<.3?"Weak ":a<.5?"Moderate ":"Strong ")+(r>=0?"positive":"negative")+" relationship";
