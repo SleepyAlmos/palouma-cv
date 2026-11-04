@@ -115,12 +115,6 @@ ul.m{font-size:12.5px;color:var(--soft);margin:10px 0 0 18px}
 </select></div>
 <div class="readout" id="rd"></div>
 <div id="cC"></div>
-<h2 style="margin-top:26px;font-size:21px">Does it hold up?</h2>
-<p class="d">Split the windows into four equal groups by seasonality strength. If seasonality helped, the strategy bars should climb from left to right.</p>
-<div id="cQ"></div>
-<div class="legend"><span><i style="background:#4a3f35"></i>Buy &amp; hold</span><span><i style="background:#b87c4c"></i>Mean reversion strategy</span></div>
-<p class="d" style="margin-top:14px">The same correlation, tested separately in each 3-year interval (one dot per commodity in each):</p>
-<div class="readout" id="rI" style="font-size:16px"></div>
 <h2 style="margin-top:26px;font-size:21px">Correlation matrix</h2>
 <p class="d">Pearson correlation between every pair of measures. Green is positive, red is negative.</p>
 <div class="heat" id="heat"></div>
@@ -245,15 +239,6 @@ function chartB(){const W=720,H=240,l=40,b=34,t=10,rr=10,d=[...rows].sort((a,b)=
  d.forEach((r,i)=>{const x0=l+i*bw;s+=`<g class="hit" data-id="${r.id}"><rect x="${x0+bw*.2}" y="${y(r.seas)}" width="${bw*.6}" height="${y(0)-y(r.seas)}" fill="${r.id===sel?"#1a1410":"#b87c4c"}"><title>${r.name}: ${r.seas.toFixed(3)}</title></rect><text class="ax" x="${x0+bw/2}" y="${y(r.seas)-5}" text-anchor="middle">${r.seas.toFixed(2)}</text><text class="ax" x="${x0+bw/2}" y="${H-14}" text-anchor="middle">${r.name}</text></g>`});
  $("cB").innerHTML=s+"</svg>"}
 
-function quart(){
- const D=pts().slice().sort((a,b)=>a.seas-b.seas),q=Math.floor(D.length/4);if(q<2){$("cQ").innerHTML="";return}
- const N=["Q1 low","Q2","Q3","Q4 high"],m=(a,k)=>a.reduce((s,x)=>s+x[k],0)/a.length;
- const it=N.map((nm,i)=>{const g=D.slice(i*q,i===3?D.length:(i+1)*q);return{lab:nm+" · "+m(g,"seas").toFixed(2),a:m(g,"asset"),s:m(g,"strat")}});
- bars(it,"cQ")}
-function stab(){
- if(!RECENT.length||WINDOWS.length){$("rI").innerHTML="";return}
- const labs=ivLabels();
- $("rI").innerHTML=labs.map((lab,i)=>{const w=rows.map(q=>recentFor(q.id)[i]).filter(Boolean);if(w.length<6)return null;const r=corr(w.map(x=>x.seasonality),w.map(x=>x.strategy_return));return lab+": r = "+(r>=0?"+":"")+r.toFixed(2)}).filter(Boolean).join(" &nbsp;·&nbsp; ")}
 function chartC(){const yk=$("ysel").value,D=pts(),W=720,H=340,l=52,b=40,t=14,rr=16;
  const xs=D.map(p=>p.seas),ys=D.map(p=>p[yk]),pad=(a,f)=>{const lo=Math.min(...a),hi=Math.max(...a),m=(hi-lo)*f||.1;return[lo-m,hi+m]};
  const[x0,x1]=pad(xs,.08),[y0,y1]=pad(ys,.1),X=v=>l+(v-x0)/(x1-x0)*(W-l-rr),Y=v=>t+(y1-v)/(y1-y0)*(H-t-b);
@@ -271,7 +256,7 @@ function chartC(){const yk=$("ysel").value,D=pts(),W=720,H=340,l=52,b=40,t=14,rr
   s+=`<g class="hit" data-id="${p.id}"><circle cx="${X(p.seas)}" cy="${Y(p[yk])}" r="${on?8:SRC().length?4:6}" fill="${on?"#1a1410":"#b87c4c"}" fill-opacity="${on?1:.7}"><title>${rw?rw.name:p.id}: seasonality ${p.seas.toFixed(2)}, ${L[yk]} ${FM[yk](p[yk])}</title></circle>${SRC().length?"":`<text class="ax" x="${X(p.seas)+9}" y="${Y(p[yk])+3}">${rw.name}</text>`}</g>`});
  $("cC").innerHTML=s+"</svg>";
  $("rd").innerHTML=`r = ${r.toFixed(3)} <span style="font-size:13px;color:var(--soft)">· p = ${pval(r,n).toFixed(3)} · R² = ${(r*r*100).toFixed(1)}% · n = ${n} ${SRC().length?"non-overlapping 3-year windows":"commodities (averages)"}</span>`;
- quart();stab()}
+ }
 
 function heat(){const D=pts(),K=["seas","asset","strat","excess","sharpe","dd"];
  let h=`<div></div>`+K.map(k=>`<div class="h">${L[k]}</div>`).join("");
