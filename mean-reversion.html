@@ -60,25 +60,26 @@ ul.m{font-size:12.5px;color:var(--soft);margin:10px 0 0 18px}
 <a class="back" href="research.html">← Back to Research</a>
 <h1>Mean Reversion in Seasonal Commodities</h1>
 <div class="tag">Data Analytics · Python · Live research</div>
-<p class="lede">Question: Does a mean reversion strategy beat buy-and-hold on seasonal commodity ETFs, and do more seasonal periods perform better?
-
+<p class="lede">
 Learning to algorithmically backtest technical momentum strategies, it seemed easy to conclude that they alone possess insufficient data for speculation. This led me to wonder whether inverting this behaviour and applying it to a historically or structurally range-bound seasonal asset might outperform buy and hold. This descriptive analysis tests whether a theoretical edge exists and whether its performance can be attributed to seasonality. 
 
-Strategy averaged +48% per 3-year window against −7% for buy-and-hold. It beat buy-and-hold in 14 of 20 windows. 
+ 
 </p>
 <div class="readout" id="dsinfo" style="font-size:15px"></div>
 
 <div class="card">
-<div class="step">Disclaimer</div>
+<div class="step">Overview</div>
 <ul class="m">
 <!--
 <li>Signal: go long when the close is below its 5-day average, short when above. Executed the next day, so there is no lookahead.</li>
 <li>Universe: the Teucrium corn, wheat, soybean and sugar ETFs (CORN, WEAT, SOYB, CANE), 2011–2026.</li>
 <li>Non-overlapping 3-year windows (756 trading days). Seasonality strength is measured per window with an STL decomposition (period 252 days).</li>
  -->
- <li>Binary exposure Backtest: Experiment does not include transaction fees and spread.</li>
- <li>Any edge is purley theoretical and has not been live tested</li>
- <li>Not investment advice. For research purposes only.</li>
+ <li>Question: Does a mean reversion strategy beat buy-and-hold on seasonal commodity ETFs, and do more seasonal periods perform better?</li>
+ <li>Strategy averaged +48% per 3-year window against −7% for buy-and-hold. It beat buy-and-hold in 14 of 20 windows.</li>
+ <li>Disclaimer: This a binary exposure backtest purley for educational purposes</li>
+
+ 
 
 </ul>
 </div>
